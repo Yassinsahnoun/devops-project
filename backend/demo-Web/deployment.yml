@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+spec:
+  selector:
+    matchLabels:
+      app: demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - name: backend
+          image: yassin24/backend:1.0
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysql-service:3306/projetdb?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+            - name: SPRING_DATASOURCE_USERNAME
+              value: ubuntu
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: ubuntu
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+spec:
+  ports:
+    - protocol: "TCP"
+      port: 8080        # The port inside the cluster
+      targetPort: 8080  # The port exposed by the service
+  type: NodePort        # Type of service
+  selector:
+    app: demo

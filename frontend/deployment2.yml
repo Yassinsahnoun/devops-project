@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular
+spec:
+  replicas: 1  # Number of desired replicas (pods)
+  selector:
+    matchLabels:
+      app: angular
+  template:
+    metadata:
+      labels:
+        app: angular
+    spec:
+      containers:
+        - name: angular-container
+          image: yassin24/frontend:latest
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 80  # Port to expose for serving the Angular app
+      volumes:
+        - name: angular-app-volume
+          emptyDir: {}  # An emptyDir volume can be used to hold static files
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-app-service
+spec:
+  selector:
+    app: angular
+  ports:
+    - protocol: TCP
+      port: 80  # The port inside the cluster
+      targetPort: 80  # The port exposed by the service
+  type: NodePort  # Type of service

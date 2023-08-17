@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<style>
+    body {background-size: cover;
+  background-image: url("../assets/images/loginbg.jpg"); /* image d'arrière-plan */
+  background-repeat: no-repeat; /* répéter l'image horizontalement et verticalement */
+  background-position: center; /* positionner l'image au centre */
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+h2{
+    color: hsl(193, 23%, 92%);
+    text-align: center;
+  display: block;
+  width: 100%;
+}
+input{
+  width: 70%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: cursive;
+}
+button {
+  background-color: #0a8690;
+  color: white;
+  padding: 7px 12px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 45%;
+  
+}
+button:hover {
+  opacity: 0.8;
+}
+    .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 40px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  
+  background-color: #fefefe;
+  margin: 1% auto 10% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 60%; /* Could be more or less, depending on screen size */
+  text-align: center;
+}
+
+/* The Close Button (x) */
+.close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fefefe;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
+#customers tr:hover {background-color: #455d7a;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #00bbf0;
+  color: white;
+}
+label{
+    color: #0eb3a5;
+}
+.centre{
+    text-align: center;
+}
+.btn-info{
+    background-color: #0eb3a5;
+  color: white;
+}
+.btn-danger{
+    background-color: #d10e0e;
+  color: white;
+}
+#blanc{
+    color: white;
+}
+.deco{
+    width: 20%;
+    background-color: #00bbf0;
+}
+</style>
+</head>
+<body>
+
+<button class="deco" (click)="goToPage()"> Déconnexion</button>
+<h2> Liste des stages</h2>
+<table class = "table table-striped" id="customers">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Niveau</th>
+            <th>Durée</th>
+            <th>Professeur</th>
+            <th>Entreprise</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor ="let stage of stages" >
+            <td> {{ stage.id }} </td>
+            <td> {{ stage.title }} </td>
+            <td> {{ stage.description }} </td>
+            <td> {{ stage.niveau }} </td>
+            <td> {{ stage.duree }} </td>
+            <td> {{ stage.professeur }} </td>
+            <td> {{ stage.entreprise }} </td>
+            <td>
+                <button  class = "btn btn-info" onclick="document.getElementById('id04').style.display='block'"> Modifier</button>
+                <button  (click)="onDeleteStage(stage)" class = "btn btn-danger" style="margin-left: 10px"> Supprimer</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+ 
+<div id="id04" class="modal">
+  
+    <form class="modal-content animate" #editForm="ngForm" (ngSubmit)="updateStage()" >
+      <div class="imgcontainer">
+        <span onclick="document.getElementById('id04').style.display='none'" class="close" title="Close Modal">&times;</span>
+      </div>
+  
+      <div class="container">
+        <label for="id"><b>Id</b></label><br>
+        <input type="text"  [(ngModel)]="stageToUpdate.id" placeholder="Enter Id" name="id" required><br>
+        <label for="titre"><b>Titre</b></label><br>
+        <input type="text"  [(ngModel)]="stageToUpdate.title" placeholder="Enter title" name="titre" required><br>
+        <label for="description"><b>Description</b></label><br>
+        <input type="text"  [(ngModel)]="stageToUpdate.description" placeholder="Enter description" name="description" required><br>
+        <label for="psw"><b>Niveau</b></label><br>
+        <input type="text"  [(ngModel)]="stageToUpdate.niveau" placeholder="Enter niveau" name="niveau" required><br>
+        <label for="psw"><b>Durée</b></label><br>
+        <input type="text"  [(ngModel)]="stageToUpdate.duree" placeholder="Enter durée" name="duree" required><br>
+        <label for="psw"><b>Professeur</b></label><br>
+        <input type="text"  [(ngModel)]="stageToUpdate.professeur" placeholder="Enter Professeur" name="professeur" ><br>
+        <label for="psw"><b>Entreprise</b></label><br>
+        <input type="text"  [(ngModel)]="stageToUpdate.entreprise" placeholder="Enter Entreprise" name="entreprise" >
+          
+        
+        
+      </div>
+      <button type="submit" [disabled]="editForm.invalid">enregistrer les modifications</button>
+      <div class="containerbtn" >
+        <button type="button" onclick="document.getElementById('id04').style.display='none'" class="cancelbtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+
+  <div class="col-md-6 offset-md-3 centre">
+    <h2> Ajouter un stage :</h2>
+    <form #addForm="ngForm" (ngSubmit)="onAddStage(addForm)" >
+    
+        <div class="form-group">
+            <label id="blanc"> Id</label><br>
+            <input type="text" ngModel class ="form-control" id = "id" name = "id">
+        </div>
+        <div class="form-group">
+            <label id="blanc"> Titre</label><br>
+            <input type="text" ngModel class ="form-control" id = "title" name = "title">
+        </div>
+    
+        <div class="form-group">
+            <label id="blanc"> Description</label><br>
+            <input type="text" ngModel class ="form-control" id = "description" name = "description">
+        </div>
+    
+        <div class="form-group">
+            <label id="blanc"> Niveau</label><br>
+            <input type="text" ngModel class ="form-control" id = "niveau" name = "niveau">
+        </div>
+
+        <div class="form-group">
+            <label id="blanc"> Durée</label><br>
+            <input type="text" ngModel class ="form-control" id = "duree" name = "duree">
+        </div>
+
+        <div class="form-group">
+            <label id="blanc"> Professeur</label><br>
+            <input type="text" ngModel class ="form-control" id = "professeur" name = "professeur">
+        </div>
+
+        <div class="form-group">
+            <label id="blanc"> Entreprise</label><br>
+            <input type="text" ngModel class ="form-control" id = "entreprise" name = "entreprise">
+        </div>
+
+
+    
+        <button [disabled]="addForm.invalid"class = "btn btn-success" type ="submit">Ajouter</button>
+    
+    </form>
+</div> 
+
+  <script>
+    // Get the modal
+    var modal = document.getElementById('id04');
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    </script>
+
+</body>
+</html>

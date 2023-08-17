@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<style>
+   body {background-size: cover;
+  background-image: url("../assets/images/loginbg.jpg"); /* image d'arrière-plan */
+  background-repeat: no-repeat; /* répéter l'image horizontalement et verticalement */
+  background-position: center; /* positionner l'image au centre */
+  background-attachment: fixed;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+h2{
+    color: hsl(193, 23%, 92%);
+    text-align: center;
+  display: block;
+  width: 100%;
+}
+input{
+  width: 70%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-family: cursive;
+}
+button {
+  background-color: #0a8690;
+  color: white;
+  padding: 7px 12px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 45%;
+  
+}
+button:hover {
+  opacity: 0.8;
+}
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fefefe;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
+#customers tr:hover {background-color: #455d7a;}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #00bbf0;
+  color: white;
+}
+label{
+    color: #f2fbfc;
+}
+.centre{
+    text-align: center;
+}
+.deco{
+    width: 20%;
+    background-color: #00bbf0;
+}
+</style>
+</head>
+<body>
+
+<button class="deco" (click)="goToPage()"> Déconnexion</button>
+<h2> Liste des stages:</h2><br>
+<table class = "table table-striped" id="customers">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>
+            <th>Description</th>
+            <th>Niveau</th>
+            <th>Durée</th>
+            <th>Professeur</th>
+            <th>Entreprise</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor ="let stage of stages" >
+            <td> {{ stage.id }} </td>
+            <td> {{ stage.title }} </td>
+            <td> {{ stage.description }} </td>
+            <td> {{ stage.niveau }} </td>
+            <td> {{ stage.duree }} </td>
+            <td> {{ stage.professeur }} </td>
+            <td> {{ stage.entreprise }} </td>
+        </tr>
+    </tbody>
+</table>
+<br>
+<h2> Si vous n'avez pas encore choisir un stage, remplissez ce formulaire:</h2>
+<div class="col-md-6 offset-md-3 centre" >
+    
+    <form #addEtudForm="ngForm" (ngSubmit)="onAddEtudiant(addEtudForm)" >
+    
+        <div class="form-group">
+            <label> Id</label><br>
+            <input type="text" ngModel class ="form-control" id = "id" name = "id">
+        </div>
+        <div class="form-group">
+            <label> Nom</label><br>
+            <input type="text" ngModel class ="form-control" id = "nom" name = "nom">
+        </div>
+    
+        <div class="form-group">
+            <label> Prénom</label><br>
+            <input type="text" ngModel class ="form-control" id = "prenom" name = "prenom">
+        </div>
+    
+        <div class="form-group">
+            <label> Niveau</label><br>
+            <input type="text" ngModel class ="form-control" id = "niveau" name = "niveau">
+        </div>
+
+        <div class="form-group">
+            <label> Adresse</label><br>
+            <input type="text" ngModel class ="form-control" id = "adresse" name = "adresse">
+        </div>
+
+        <div class="form-group">
+            <label> Email</label><br>
+            <input type="text" ngModel class ="form-control" id = "email" name = "email">
+        </div>
+
+        <div class="form-group">
+            <label> Titresujet</label><br>
+            <input type="text" ngModel class ="form-control" id = "titresujet" name = "titresujet">
+        </div>
+
+        <button [disabled]="addEtudForm.invalid"class = "btn btn-success" type ="submit">Ajouter</button>
+    
+    </form>
+</div> 
+<br>
+<h2> Si vous voulez vérifier la validation de votre stage, Entrez votre CIN:</h2>
+<div class="centre">
+    <input type="number" [(ngModel)]="studentId">
+    <button (click)="searchStudent()">Rechercher</button>
+</div>
+  
+<table id="customers">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Niveau</th>
+        <th>Adresse</th>
+        <th>Email</th>
+        <th>Titre sujet</th>
+        <th>Validation</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="etudiant">
+      <tr>
+        <td> {{ etudiant.id }} </td>
+        <td> {{ etudiant.nom }} </td>
+        <td> {{ etudiant.prenom }} </td>
+        <td> {{ etudiant.niveau }} </td>
+        <td> {{ etudiant.adresse }} </td>
+        <td> {{ etudiant.email }} </td>
+        <td> {{ etudiant.titresujet }} </td>
+        <td> {{ etudiant.validation }} </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
+
+</body>
+</html>

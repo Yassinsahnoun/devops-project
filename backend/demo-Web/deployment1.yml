@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - protocol: TCP
+      port: 3306
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: ubuntu
+            - name: MYSQL_DATABASE
+              value: projetdb
+            - name: MYSQL_USER
+              value: ubuntu
+            - name: MYSQL_PASSWORD
+              value: ubuntu
+         
+      volumes:
+        - name: init-script
+          configMap:
+            name: mysql-init-script
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init-script
+data:
+  init.sql: |
+    CREATE DATABASE projetdb;
+    CREATE USER 'ubuntu' IDENTIFIED BY 'ubuntu';
+    GRANT ALL PRIVILEGES ON projetdb.* TO 'ubuntu';
+    CREATE USER 'ubuntu'@'%' IDENTIFIED BY 'ubuntu';
+    GRANT ALL PRIVILEGES ON projetdb.* TO 'ubuntu'@'%';
+    FLUSH PRIVILEGES;
