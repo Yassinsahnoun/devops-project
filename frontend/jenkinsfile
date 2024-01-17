@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    stages{
+        stage('Build angular app'){
+            steps{
+               checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Yassinsahnoun/devops-angular']])
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+        
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t yassin24/devops-integration-angular .'
+                }
+            }
+        } 
+        
+        stage('Push image to Hub'){
+            steps{
+                script{
+                   withCredentials([string(credentialsId: '123456', variable: 'dockerhubpwd')])  {
+                   sh 'docker login -u yassin24 -p ${dockerhubpwd}'
+
+}
+                   sh 'docker push yassin24/devops-integration-angular'
+                }
+            }
+        }
+        
+        stage('deploy to kubernetes'){
+            steps{
+                script{
+                    kubernetesDeploy (configs:'deployment2.yml', kubeconfigId:'kub')
+                    
+                }
+            }
+        } 
+           
+        
+       
+        
+        
+        
+    }
+    
+}

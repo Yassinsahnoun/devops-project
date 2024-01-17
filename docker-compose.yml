@@ -2,6 +2,25 @@ version: '3.7'
 
 # Define services
 services:
+
+  # Database Service (Mysql)
+  db:
+    image: mysql:5.7
+    ports:
+      - "33098:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: projetdb
+      MYSQL_USER: ubuntu
+      MYSQL_PASSWORD: ubuntu
+      MYSQL_ROOT_PASSWORD: ubuntu
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./MySQL_Init_Script:/docker-entrypoint-initdb.d
+    networks:
+      - backend  
+
+  #backend service
   backend-server:
     build:
       context: ./backend/demo-Web
@@ -32,26 +51,6 @@ services:
     networks:
       - frontend  
 
-  # Database Service (Mysql)
-  db:
-    image: mysql:5.7
-    ports:
-      - "33098:3306"
-    restart: always
-    environment:
-      MYSQL_DATABASE: projetdb
-      MYSQL_USER: ubuntu
-      MYSQL_PASSWORD: ubuntu
-      MYSQL_ROOT_PASSWORD: ubuntu
-    volumes:
-      - db-data:/var/lib/mysql
-      - ./MySQL_Init_Script:/docker-entrypoint-initdb.d
-    networks:
-      - backend  
-  
-# Volumes
-volumes:
-  db-data:
 
 # Networks to be created to facilitate communication between containers
 networks:

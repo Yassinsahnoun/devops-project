@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    tools{
+        maven 'maven_3_5_0'
+    }
+    stages{
+        stage('Build Maven'){
+            steps{
+               checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Yassinsahnoun/devops-spring']])
+                sh 'mvn compile package'
+            }
+        }
+
+         stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t yassin24/devops-integration .'
+                }
+            }
+        }   
+            
+        stage('Push image to Hub'){
+            steps{
+                script{
+                   withCredentials([string(credentialsId: '123456', variable: 'dockerhubpwd')])  {
+                   sh 'docker login -u yassin24 -p ${dockerhubpwd}'
+
+}
+                   sh 'docker push yassin24/devops-integration'
+                }
+            }
+        }
+           
+           
+        stage('deploy to kubernetes'){
+            steps{
+                script{
+                    kubernetesDeploy (configs:'deployment1.yml', kubeconfigId:'kub')
+                    kubernetesDeploy (configs:'deployment.yml', kubeconfigId:'kub')
+                    
+                }
+            }
+        } 
+       
+        
+        
+        
+    }
+    
+}
